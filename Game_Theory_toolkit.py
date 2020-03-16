@@ -11,6 +11,7 @@ root.title("Game Theory")
 root.geometry("+500+500")
 root.iconbitmap(r"c:\Users\Pol\Downloads\logo_upf.ico")
 
+#global variables
 rows = 4
 columns = 3
 matrix = []
@@ -23,7 +24,7 @@ b_dicc = {}
 ismixed = False
 eval_list = []
 isatheproblem = True
-p_notmixed = 0
+p_notmixed = "No"
 
 
 i11 = Entry(root, width=2, font="Verdana 14")
@@ -55,7 +56,7 @@ la41 = Label(root, text="(", font="Verdana 14")
 la42 = Label(root, text=",", font="Verdana 14")
 la43 = Label(root, text=")", font="Verdana 14")
 
-#primera fila de inputs
+#first row of inputs
 la1.grid(row=3, column=1, padx=(15,25), pady=10)
 la11.grid(row=3, column=2)
 i11.grid(row=3, column=3)
@@ -69,7 +70,7 @@ la22.grid(row=3, column=9)
 i22.grid(row=3, column=10)				
 la23.grid(row=3, column=11, padx=(0,20))
 
-#segona fila de inputs
+#second row of inputs
 la3.grid(row=4, column=1, padx=(15,25), pady=10)
 la31.grid(row=4, column=2)
 i31.grid(row=4, column=3)
@@ -83,19 +84,20 @@ la42.grid(row=4, column=9)
 i42.grid(row=4, column=10)
 la43.grid(row=4, column=11, padx=(0,20))
 
-#labels eix y
+#labels y axis
 lb1 = Label(root, text="b1", font="Verdana 14")
 lb1.grid(row=2, column=3, columnspan=3)
 lb2 = Label(root, text="b2", font="Verdana 14")
 lb2.grid(row=2, column=8, columnspan=3)
 
+#create a matrix of each category
 matrix = [[[la11,i11,la12,i12,la13],[la21,i21,la22,i22,la23]],[[la31,i31,la32,i32,la33],[la41,i41,la42,i42,la43]]]
 row_labels = [la1, la3]
 column_labels = [lb1,lb2]
 
-
-
-
+"""
+Matrix UI management
+"""
 
 def add_row():
 	global matrix
@@ -230,9 +232,8 @@ def delete_column():
 
 """
 
-|||||
-|||||     ALGORISM STRUCTURE (BACKEND)
-vvvvv
+		TOOLKIT ALGORISMS
+
 
 """
 
@@ -501,6 +502,7 @@ def compute_mixed_ne():
 	global isatheproblem
 	isatheproblem = False
 	global p_notmixed
+	p_notmixed = "No"
 	
 	try:
 		if (len(a_matrix) != len(b_matrix)):
@@ -538,10 +540,12 @@ def compute_mixed_ne():
 		if(isatheproblem):
 			try:
 				p_notmixed = np.linalg.solve(b_array, zeroes)
+				p_notmixed = p_notmixed[0]
 			except:
 				pass
 		else:
 			p_notmixed = np.linalg.solve(a_array, zeroes)
+			p_notmixed = p_notmixed[0]
 
 		if(dimension == 2):
 			pa1 = a_matrix[0][1]
@@ -887,25 +891,18 @@ def plot_best_response():
 	for i in range(len(ne)):
 		ne_a.append(ne[i][0])
 		ne_b.append(ne[i][1])
-	print(ne)
-	print(ne_a)
-	print(ne_b)
 	
-	x = np.linspace(0,1,1000)
 	fig, ax1 = plt.subplots()
-	ax1.set(xlabel="p", ylabel='q')
-	plt.ylabel("q",rotation=90)
+	ax1.set(xlabel="p")
+	plt.ylabel("q",rotation=0)
+	blue_patch = patches.Patch(color="blue", label="Player A")
+	red_patch = patches.Patch(color="red", label="Player B")
+	plt.legend(handles=[blue_patch,red_patch], loc="lower right")
 
 	#if we have a 2x2 matrix on the start and any row/column is being dominated, also plot them
 	if((rows == 4) and (columns == 3) and ((len(list(a_dicc.keys())) == 1) or (len(list(b_dicc.keys())) == 1))):
-		if ((len(list(a_dicc.keys())) == 1) and (sorted(list(a_dicc.keys()))[0] == 1)):
-			for i in range(len(ne)):
-				ne_a[i] = 0
+		
 
-		if ((len(list(b_dicc.keys())) == 1) and (sorted(list(b_dicc.keys()))[0] == 1)):
-			for i in range(len(ne)):
-				ne_b[i] = 0
-	
 		if(len(list(a_dicc.keys())) == 1):
 			ax1.vlines(1-list(a_dicc.keys())[0],0,1, color="blue", linewidth=4, linestyle="-.")
 			if(len(list(b_dicc.keys())) == 1):
@@ -919,60 +916,148 @@ def plot_best_response():
 			ax1.vlines(1-list(a_dicc.keys())[0],0,1, color="blue", linewidth=4, linestyle="-.")
 			ax1.hlines(1-list(b_dicc.keys())[0],0,1, color="blue", linewidth=4, linestyle="-.")
 		
+	
+	#2x2 matrices 
 	if(((len(list(a_dicc.keys())) == 2) and (len(list(b_dicc.keys())) == 2))):
-		
+		#matrices with mixed strategies
 		if(ismixed):
-			ax1.vlines(ne_a[-1],0,1, color="blue", linewidth=4, linestyle="-.")
-			ax1.hlines(ne_b[-1],0,1, color="red", linewidth=4, linestyle="--")
-			for i in range(len(ne_a)-1):
-				ax1.hlines(ne_b[i],ne_a[-1],ne_a[i], color="blue", linewidth=4, linestyle="-.")
-				ax1.hlines(ne_b[i],ne_a[-1],ne_a[i], color="blue", linewidth=4, linestyle="-.")
+			ax1.hlines(ne_b[-1],0,1, color="blue", linewidth=4, linestyle="-.")
+			ax1.vlines(ne_a[-1],0,1, color="red", linewidth=4, linestyle="--")
+			
+			if((eval_list[0] == True) and (eval_list[1] == True) or (eval_list[0] == False) and (eval_list[1] == False)):
+				if((eval_list[0] == True) and (eval_list[1] == True)):
+					ax1.vlines(1,0,1, color="blue", linewidth=4, linestyle="-.")
+				else:
+					ax1.vlines(0,0,1, color="blue", linewidth=4, linestyle="-.")
+			
+			else:
+				if(eval_list[0] == True):
+					ax1.vlines(1,ne_b[-1],0, color="blue", linewidth=4, linestyle="-.")
+					ax1.vlines(0,ne_b[-1],1, color="blue", linewidth=4, linestyle="-.")
+				else:
+					ax1.vlines(1,ne_b[-1],1, color="blue", linewidth=4, linestyle="-.")
+					ax1.vlines(0,ne_b[-1],0, color="blue", linewidth=4, linestyle="-.")
 
-				ax1.vlines(ne_a[i],ne_b[-1],ne_b[i], color="red", linewidth=4, linestyle="--")
-				ax1.vlines(ne_a[i],ne_b[-1],ne_b[i], color="red", linewidth=4, linestyle="--")
 
-		
-		#2 pure NE and infinite mixed strategies
-		if((not ismixed) and (len(ne_a) == 2)):
-			if (isatheproblem):
+
+			if((eval_list[2] == True) and (eval_list[3] == True) or (eval_list[2] == False) and (eval_list[3] == False)):
+				if((eval_list[2] == True) and (eval_list[3] == True)):
+					ax1.hlines(1,0,1, color="red", linewidth=4, linestyle="--")
+				else:
+					ax1.hlines(0,0,1, color="red", linewidth=4, linestyle="--")
+
+			else:
+				if(eval_list[2] == True):
+					ax1.hlines(0,ne_a[-1],1, color="red", linewidth=4, linestyle="--")
+					ax1.hlines(1,ne_a[-1],0, color="red", linewidth=4, linestyle="--")
+				else:
+					ax1.hlines(0,ne_a[-1],0, color="red", linewidth=4, linestyle="--")
+					ax1.hlines(1,ne_a[-1],1, color="red", linewidth=4, linestyle="--")
+
+
+		#matrices without mixed strategies (infinite number)
+		if((not ismixed) and (p_notmixed != "No")):
+
+			if(isatheproblem):
 				ax1.add_patch(patches.Rectangle((0,0),1,1, color="blue"))
+				ax1.vlines(p_notmixed,0,1, color="red", linewidth=4, linestyle="--")
+				if((eval_list[2] == True) and (eval_list[3] == True) or (eval_list[2] == False) and (eval_list[3] == False)):
+					if((eval_list[2] == True) and (eval_list[3] == True)):
+						ax1.hlines(1,0,1, color="red", linewidth=4, linestyle="--")
+					else:
+						ax1.hlines(0,0,1, color="red", linewidth=4, linestyle="--")
+
+				else:
+					if(eval_list[2] == True):
+						ax1.hlines(0,p_notmixed,1, color="red", linewidth=4, linestyle="--")
+						ax1.hlines(1,p_notmixed,0, color="red", linewidth=4, linestyle="--")
+					else:
+						ax1.hlines(0,p_notmixed,0, color="red", linewidth=4, linestyle="--")
+						ax1.hlines(1,p_notmixed,1, color="red", linewidth=4, linestyle="--")
 
 			else:
 				ax1.add_patch(patches.Rectangle((0,0),1,1, color="red"))
+				ax1.hlines(p_notmixed,0,1, color="blue", linewidth=4, linestyle="-.")
+				if((eval_list[0] == True) and (eval_list[1] == True) or (eval_list[0] == False) and (eval_list[1] == False)):
+					if((eval_list[0] == True) and (eval_list[1] == True)):
+						ax1.vlines(1,0,1, color="blue", linewidth=4, linestyle="-.")
+					else:
+						ax1.vlines(0,0,1, color="blue", linewidth=4, linestyle="-.")
+				
+				else:
+					if(eval_list[0] == True):
+						ax1.vlines(1,p_notmixed,0, color="blue", linewidth=4, linestyle="-.")
+						ax1.vlines(0,p_notmixed,1, color="blue", linewidth=4, linestyle="-.")
+					else:
+						ax1.vlines(1,p_notmixed,1, color="blue", linewidth=4, linestyle="-.")
+						ax1.vlines(0,p_notmixed,0, color="blue", linewidth=4, linestyle="-.")
 
 
 
-
-
-		if((len(ne_a) == 4) and (not ismixed)):
+		if((not ismixed) and (p_notmixed == "No")):
 			ax1.add_patch(patches.Rectangle((0,0),1,1, color="purple"))
-		
-
-		if((len(ne_a) == 2) and (ismixed)):
-			if (ne_a[0] == 1):
-				if(eval_list[0] == True):
-					pass
-
 
 	plt.show()
 	
 
 
+"""
+BUTTONS AND LAYOUT
+"""
+def create_button_window():
+	window = Toplevel(root)
+	window.iconbitmap(r"c:\Users\Pol\Downloads\logo_upf.ico")
+	window.title("Choose an option")
+	
+	button_frame1 = Frame(window, highlightthickness=3, bd=3, bg="#C90A2B")
+	buttonframe1 = button_frame1.grid(padx=8, pady=8, row=3, column=1)
+	button_frame2 = Frame(window, highlightthickness=3, bd=3, bg="#C90A2B")
+	buttonframe2 = button_frame2.grid(padx=8, pady=8, row=3, column=2)
+	button_frame3 = Frame(window, highlightthickness=3, bd=3, bg="#C90A2B")
+	buttonframe3 = button_frame3.grid(padx=8, pady=8, row=2, column=2)
+	button_frame4 = Frame(window, highlightthickness=3, bd=3, bg="#C90A2B")
+	buttonframe4 = button_frame4.grid(padx=8, pady=8, row=2, column=1)
+	button_frame5 = Frame(window, highlightthickness=3, bd=3, bg="#C90A2B")
+	buttonframe5 = button_frame5.grid(padx=8, pady=8, row=1, column=2)
+	button_frame6 = Frame(window, highlightthickness=3, bd=3, bg="#C90A2B")
+	buttonframe6 = button_frame6.grid(padx=8, pady=8, row=1, column=1)
 
-btn12 = Button(root, text="Plot optimal responses of each player to a mixed strategy", command=compute_optimal_line)
-btn12.grid(row=994, column=1000)
+	def quit_action_window():
+		window.destroy()
+		
 
-btn11 = Button(root, text="Plot NE in mixed strategies", command=plot_best_response)
-btn11.grid(row=995, column=1000)
 
-btn10 = Button(root, text="Mixed Nash Equilibrium", command=show_mixed_ne)
-btn10.grid(row=996, column=1000)
 
-btn8 = Button(root, text="Find Pure NE", command=show_pure_ne)
-btn8.grid(row=997, column=1000)
+	btn12 = Button(button_frame1, text="Plot optimal responses of each player to a mixed strategy", command=lambda:[quit_action_window(),compute_optimal_line()], width=28, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
+	btn12.grid()
 
-btn9 = Button(root, text="Iterated Strongly DS", command=show_iterated_strongly_dominated_strategies_message)
-btn9.grid(row=999, column=1000)
+	btn11 = Button(button_frame2, text="Plot Nash Equilibria in mixed strategies", command=lambda:[quit_action_window(),plot_best_response()], width=28, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
+	btn11.grid()
+
+	btn10 = Button(button_frame3, text="Mixed Nash Equilibrium", command=lambda:[quit_action_window(),show_mixed_ne()], width=28, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
+	btn10.grid()
+
+	btn8 = Button(button_frame4, text="Pure Nash Equilibria", command=lambda:[quit_action_window(),show_pure_ne()], width=28, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
+	btn8.grid()
+
+	btn9 = Button(button_frame5, text="Iterated Elimination of Dominated Strategies", command=lambda:[quit_action_window(),show_iterated_strongly_dominated_strategies_message()], width=28, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
+	btn9.grid()
+
+	btn5 = Button(button_frame6, text="Show Dominated Strategies", command=lambda:[quit_action_window(),show_dominated()], width=28, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
+	btn5.grid()
+
+	
+
+
+
+
+
+
+
+action_button = Button(root, text="Actions", command=create_button_window)
+action_button.grid(row=993, column=1000)
+
+
 
 btn1 = Button(root, text="Delete Row", command=delete_row)
 btn1.grid(row=1001, column=1)
@@ -985,9 +1070,6 @@ btn3.grid(row=1, column=1000)
 
 btn4 = Button(root, text="Delete Column", command=delete_column)
 btn4.grid(row=2, column=1000)
-
-btn5 = Button(root, text="Show Dominated", command=show_dominated)
-btn5.grid(row=998, column=1000)
 
 btn7 = Button(root, text="Clear matrix", command=clear_matrix)
 btn7.grid(row=3, column=1000)
