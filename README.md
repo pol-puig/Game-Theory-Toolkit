@@ -43,7 +43,7 @@ The Python libraries that I have used are 'matplotlib' and 'numpy'. For the GUI,
 
 **Download:** **[Game Theory Toolkit v0.7](https://github.com/Pol-Puig/Game-Theory-Toolkit/releases/download/GameTheory0.7/Game_Theory_toolkit_0_7.zip)**
 
-Download and decompress the file. Then run the executable file inside the folder called 'Game_Theory_toolkit.exe'. An antivirus warning will likely prompt. Ignore it (there are no malicious files, don't worry) and just run the executable.
+Download and decompress the file. Then run the executable file called 'Game_Theory_toolkit.exe' that is inside the folder. An antivirus warning will likely prompt. Ignore it (there are no malicious files, don't worry) and just run the executable.
 
 <b>Note: MacOS is not yet supported although it may be possible to run it using Wine.
   
