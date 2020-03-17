@@ -9,7 +9,7 @@ import matplotlib.patches as patches
 root = Tk()
 root.title("Game Theory")
 root.geometry("+500+500")
-root.iconbitmap("logo_upf.ico")
+root.iconbitmap("files/logo_upf.ico")
 
 #global variables
 rows = 4
@@ -1008,7 +1008,7 @@ BUTTONS AND LAYOUT
 """
 def create_button_window():
 	window = Toplevel(root)
-	window.iconbitmap("logo_upf.ico")
+	window.iconbitmap("files/logo_upf.ico")
 	window.title("Choose an option")
 	
 	button_frame1 = Frame(window, highlightthickness=3, bd=3, bg="#C90A2B")
