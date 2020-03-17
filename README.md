@@ -22,7 +22,7 @@ The Python libraries that I have used are 'matplotlib' and 'numpy'. For the GUI,
 ## Future development
 
 * Add tool: Iterated elimination of weakly dominated strategies.
-* Add tool: Rationalizable strategies. Marks on the matrix and finds solution (if exists).
+* Add tool: Rationalizable strategies. Colors the matrix and finds solution (if exists).
 * Add tool: Pure security strategies (maxminimization). Find payoffs.
 * Add tool: Mixed security strategies. Plot and find probabilities.
 * Improve overall 'badly' written code.
