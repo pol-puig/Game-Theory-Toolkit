@@ -9,7 +9,7 @@ import matplotlib.patches as patches
 root = Tk()
 root.title("Game Theory")
 root.geometry("+500+500")
-root.iconbitmap(r"c:\Users\Pol\Downloads\logo_upf.ico")
+root.iconbitmap("logo_upf.ico")
 
 #global variables
 rows = 4
@@ -98,6 +98,8 @@ column_labels = [lb1,lb2]
 """
 Matrix UI management
 """
+#D36779
+
 
 def add_row():
 	global matrix
@@ -609,7 +611,7 @@ def show_mixed_ne():
 	t2 = False
 	#check if there is no nash equilibria
 	if (ne == []):
-		messagebox.showinfo("Nash equilibrium in mixed strategies", "There is no nash equilibria in mixed strategies or there is an infinite number")
+		messagebox.showinfo("Nash equilibrium in mixed strategies", "There is no Nash Equilibria in mixed strategies or there is an infinite number")
 		raise Exception("No nash equilibria")
 
 	#check if it is a pure nash equilibrium
@@ -1006,7 +1008,7 @@ BUTTONS AND LAYOUT
 """
 def create_button_window():
 	window = Toplevel(root)
-	window.iconbitmap(r"c:\Users\Pol\Downloads\logo_upf.ico")
+	window.iconbitmap("logo_upf.ico")
 	window.title("Choose an option")
 	
 	button_frame1 = Frame(window, highlightthickness=3, bd=3, bg="#C90A2B")
@@ -1025,8 +1027,6 @@ def create_button_window():
 	def quit_action_window():
 		window.destroy()
 		
-
-
 
 	btn12 = Button(button_frame1, text="Plot optimal responses of each player to a mixed strategy", command=lambda:[quit_action_window(),compute_optimal_line()], width=28, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
 	btn12.grid()
@@ -1049,30 +1049,54 @@ def create_button_window():
 	
 
 
+#About button
+def show_about():
+	msg = "Hi I'm Pol, the developer of this project. This software is being developed since January 2020. You are currently using the version 0.7 and there are still some functionalities to be implemented in the future. Check my Github profile for more information: www.github.com/Pol-Puig/Game-Theory-Toolkit\n\nFor any issue related on this program or any other matter, feel free to contact me: contact@polpuig.com\n\nThank you for using my software!!!\n\n" 
+	messagebox.showinfo("ABOUT", msg)
+
+about_btn = Button(root, text="Created by: Pol Puig", command=show_about, relief="ridge", font="Verdana 7 bold")
+about_btn.grid(row=0,column=1000, sticky=NE)
 
 
 
+button_frame7 = Frame(root, highlightthickness=3, bd=3, bg="#C90A2B")
+buttonframe7 = button_frame7.grid(padx=8, pady=8, row=1000, column=7, columnspan=4, rowspan=3)
+button_frame8 = Frame(root, highlightthickness=3, bd=1, bg="#C90A2B")
+buttonframe8 = button_frame8.grid(padx=8, pady=8, row=1000, column=2, columnspan=5)
+button_frame9 = Frame(root, highlightthickness=3, bd=1, bg="#C90A2B")
+buttonframe9 = button_frame9.grid(padx=8, pady=8, row=1000, column=1, columnspan=3)
+button_frame10 = Frame(root, highlightthickness=3, bd=1, bg="#C90A2B")
+buttonframe10 = button_frame10.grid(padx=8, pady=0, row=1, column=1000, rowspan=2, sticky=S)
+button_frame11 = Frame(root, highlightthickness=3, bd=1, bg="#C90A2B")
+buttonframe11 = button_frame11.grid(padx=8, pady=(0,30), row=3, column=1000, rowspan=1, sticky=N)
+button_frame12 = Frame(root, highlightthickness=3, bd=1, bg="#C90A2B")
+buttonframe12 = button_frame12.grid(padx=8, pady=8, row=4, column=1000, rowspan=2)
+button_frame13 = Frame(root, highlightthickness=3, bd=5, bg="#C90A2B")
+buttonframe13 = button_frame13.grid(padx=8, pady=8, row=0, column=0, columnspan=10, rowspan=2)
 
 
-action_button = Button(root, text="Actions", command=create_button_window)
-action_button.grid(row=993, column=1000)
+#title
+title_label = Label(button_frame13, text="Normal Form Game", font="Arial 18 bold")
+title_label.grid()
 
 
+action_button = Button(button_frame7, text="Tools", command=create_button_window, relief="flat", font="Arial 12 bold")
+action_button.grid()
 
-btn1 = Button(root, text="Delete Row", command=delete_row)
-btn1.grid(row=1001, column=1)
+btn1 = Button(button_frame8, text="Delete Row", command=delete_row, relief="flat")
+btn1.grid()
 
-btn2 = Button(root, text="Add Row",command=add_row)
-btn2.grid(row=1000, column=1)
+btn2 = Button(button_frame9, text="Add Row",command=add_row, relief="flat")
+btn2.grid()
 
-btn3 = Button(root, text="Add Column", command=add_column)
-btn3.grid(row=1, column=1000)
+btn3 = Button(button_frame10, text="Add Column", command=add_column, relief="flat")
+btn3.grid()
 
-btn4 = Button(root, text="Delete Column", command=delete_column)
-btn4.grid(row=2, column=1000)
+btn4 = Button(button_frame11, text="Delete Column", command=delete_column, relief="flat")
+btn4.grid()
 
-btn7 = Button(root, text="Clear matrix", command=clear_matrix)
-btn7.grid(row=3, column=1000)
+btn7 = Button(button_frame12, text="Clear matrix", command=clear_matrix, relief="flat", bg="#D36779")
+btn7.grid()
 
 
 #Randomize grid
