@@ -34,3 +34,13 @@ The Python libraries that I have used are 'matplotlib' and 'numpy'. For the GUI,
 ## Known issues
 
 * When plotting Nash Equilibria in mixed strategies, the main window freezes and is not possible to do anything before closing the figure window.
+
+
+
+## Releases
+
+
+Download and decompress the file. Then look for the executable file inside the folder called 'Game_Theory_toolkit.exe' and run it.
+
+<b>Note: MacOS is not yet supported although it may be possible to run it using Wine.
+  
