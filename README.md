@@ -1,4 +1,4 @@
-# Game-Theory-Toolkit
+# Game Theory Toolkit
 
 This project is about making a toolkit to help people interested in Game Theory solve some of the most common topics. The main idea was just to create an interective matrix that could find pure Nash Equilibria and not much more. But the interest I have in this project has made me try to develope more tools and make the project more complete. Now it is even possible to plot some of the functions covered in Game Theory.
 
