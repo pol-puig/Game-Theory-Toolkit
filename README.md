@@ -34,11 +34,14 @@ The Python libraries that I have used are 'matplotlib' and 'numpy'. For the GUI,
 ## Known issues
 
 * When plotting Nash Equilibria in mixed strategies, the main window freezes and is not possible to do anything before closing the figure window.
+* Released file is very large. Working on directory optimization to reduce software heaviness.
+
 
 
 
 ## Releases
 
+**Download:** **[Game Theory Toolkit v0.7](https://github.com/Pol-Puig/Game-Theory-Toolkit/releases/download/GameTheory0.7/Game_Theory_toolkit_0_7.zip)**
 
 Download and decompress the file. Then look for the executable file inside the folder called 'Game_Theory_toolkit.exe' and run it.
 
