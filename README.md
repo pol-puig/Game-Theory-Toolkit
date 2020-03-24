@@ -10,10 +10,10 @@ The Python libraries that I have used are 'matplotlib' and 'numpy'. For the GUI,
 
 ## Tools
 
-* Iterated elimination of dominated strategies. Marks in red the columns and rows that have been eliminated. If there is a solution by applying this method, it shows it.
-* Show dominated strategies. Marks in red the dominated strategies and in orange the weakly dominated strategies. Shows in a message box the strategies that are being dominated and by which strategies are being dominated.
+* Iterated elimination of dominated strategies. Highlights in red the columns and rows that have been eliminated. If there is a solution by applying this method, it shows it.
+* Show dominated strategies. Highlights in red the dominated strategies and in orange the weakly dominated strategies. Shows in a message box the strategies that are being dominated and by which strategies are being dominated.
 * Find pure Nash Equilibria. Looks for Nash Equilibria and shows their strategies in a message box. It also changes the color of the optimal response of each strategy to yellow in the matrix.
-* Find mixed Nash Equilibrium. A message box indicates the mixed Nash Equilibrium. It also tells you if the Mixed Nash Equilibrium it is a pure nash equilibrium or it shows an error if there is no Mixed Nash Equilibrium.
+* Find mixed Nash Equilibrium. A message box indicates the mixed Nash Equilibrium (the one that you get by doing the equations). It also tells you if the Mixed Nash Equilibrium it is a pure nash equilibrium or it shows an error if there is no Mixed Nash Equilibrium. Be aware that could be infinite mixed Nash equilibria, plot best response functions for more information.
 * Plot optimal response of each player to a mixed strategy. Maximum of 2x2 matrices or matrices that after the IEDS have a dimension of 2 or less. If there is any dominated strategy, it will only be plotted if the original matrix is 2x2 (not possible to plot all the dominated lines)
 * Plot best response functions. Plot best response functions depending on the optimal response of each player to a a mixed strategy
 
@@ -33,8 +33,10 @@ The Python libraries that I have used are 'matplotlib' and 'numpy'. For the GUI,
 
 ## Known issues
 
-* When plotting Nash Equilibria in mixed strategies, the main window freezes and is not possible to do anything before closing the figure window.
+* When plotting best response functions, the main window freezes and is not possible to do anything before closing the figure window.
 * Released file is very large. Working on directory optimization to reduce software heaviness.
+* Not plotting correctly best response functions when matrix dimension is bigger than 2 and applying IEDS leads to a matrix with a dimension lesser than 2.
+* Some grammar mistakes (mainly in the 'About' message box)
 
 
 
@@ -45,5 +47,5 @@ The Python libraries that I have used are 'matplotlib' and 'numpy'. For the GUI,
 
 Download and decompress the file. Then run the executable file called 'Game_Theory_toolkit.exe' that is inside the folder. An antivirus warning will likely prompt. Ignore it (there are no malicious files, don't worry) and just run the executable.
 
-<b>Note: MacOS is not yet supported although it may be possible to run it using Wine.
+<b>Note: MacOS is not yet supported although it may be possible to run it using Wine or using a virtual machine.
   
