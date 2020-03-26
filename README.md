@@ -14,7 +14,7 @@ The Python libraries that I have used are 'matplotlib' and 'numpy'. For the GUI,
 * Show dominated strategies. Highlights in red the dominated strategies and in orange the weakly dominated strategies. Shows in a message box the strategies that are being dominated and by which strategies are being dominated.
 * Find pure Nash Equilibria. Looks for Nash Equilibria and shows their strategies in a message box. It also changes the color of the optimal response of each strategy to yellow in the matrix.
 * Find mixed Nash Equilibrium. A message box indicates the mixed Nash Equilibrium (the one that you get by solving the system of equations). It also tells you if the Mixed Nash Equilibrium it is a pure nash equilibrium or it shows an error if there is no Mixed Nash Equilibrium. Be aware that could be infinite mixed Nash equilibria, plot best response functions for more information.
-* Plot optimal response of each player to a mixed strategy. Maximum of 2x2 matrices or matrices that after the IEDS have a dimension of 2 or less. If there is any dominated strategy, it will only be plotted if the original matrix is 2x2 (not possible to plot all the dominated lines)
+* Plot optimal response of each player to a mixed strategy. Maximum of 2x2 matrices or matrices that after the IEDS have a dimension of 2. If there is any dominated strategy, it will only be plotted if the original matrix is 2x2 (not possible to plot all the dominated lines)
 * Plot best response functions. Plot best response functions depending on the optimal response of each player to a a mixed strategy
 
 
@@ -23,10 +23,10 @@ The Python libraries that I have used are 'matplotlib' and 'numpy'. For the GUI,
 
 * Add tool: Iterated elimination of weakly dominated strategies.
 * Add tool: Rationalizable strategies. Colors the matrix and finds solution (if exists).
-* Add tool: Pure security strategies (maxminimization). Find payoffs.
-* Add tool: Mixed security strategies. Plot and find probabilities.
+* Add tool: Pure security strategies (maxminimization). Find payoffs.  **ADDED**
+* Add tool: Mixed security strategies. Plot and find probabilities.   **ADDED**
 * Improve overall 'badly' written code.
-* Improve User Interface by making it more friendly and better color combining.
+* Improve User Interface by making it more friendly and better color combining. **DONE**
 * Add a database containing 'famous' games.
 
 
@@ -35,7 +35,7 @@ The Python libraries that I have used are 'matplotlib' and 'numpy'. For the GUI,
 
 * When plotting best response functions, the main window freezes and is not possible to do anything before closing the figure window.
 * Released file is very large. Working on directory optimization to reduce software heaviness.
-* Not plotting correctly best response functions when matrix dimension is bigger than 2 and applying IEDS leads to a matrix with a dimension lesser than 2.
+* Not correctly plotting best response functions when matrix dimension is bigger than 2 and applying IEDS leads to a matrix with a dimension lesser than 2. **SOLVED**
 * Some grammar mistakes (mainly in the 'About' message box)
 
 
