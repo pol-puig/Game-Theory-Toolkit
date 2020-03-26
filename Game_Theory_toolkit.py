@@ -249,7 +249,7 @@ def get_a_numbers():
 		for cell in row:	
 			a = cell[1].get()
 			if (((a.startswith('-') and a[1:].isdigit()) == False) and ((a.isdigit() == False))):
-				messagebox.showerror("ERROR","Some input squares are missing or format is not supported.")
+				messagebox.showerror("ERROR","Some input squares are blank or format is not supported.")
 				raise Exception("Some input squares are missing.")
 			else:
 				ll1.append(int(cell[1].get()))
@@ -269,7 +269,7 @@ def get_b_numbers():
 		for i in range(len(matrix)):
 			a = matrix[i][j][3].get()
 			if (((a.startswith('-') and a[1:].isdigit()) == False) and ((a.isdigit() == False))):
-				messagebox.showerror("ERROR","Some input squares are missing or format is not supported.")
+				messagebox.showerror("ERROR","Some input squares are blank or format is not supported.")
 				raise Exception("Some input squares are missing.")
 			else:
 				ll1.append(int(a))
@@ -420,10 +420,10 @@ def randomize():
 	y = last.get()
 	for item in [x,y]:	
 		if (((item.startswith('-') and item[1:].isdigit()) == False) and ((item.isdigit() == False))):
-			messagebox.showerror("ERROR","Some input squares are missing or format is not supported.")
+			messagebox.showerror("ERROR","Some randomize input squares are blank or format is not supported.")
 			raise Exception("Some input squares are missing or format not supported.")
 	if int(x) > int(y):
-		messagebox.showerror("ERROR","Randomize range not supported.")
+		messagebox.showerror("ERROR","Randomize range not supported (upper limit is lower than lower limit)")
 		raise Exception("Randomize range not supported.")				
 
 	for row in matrix:
@@ -611,7 +611,7 @@ def show_mixed_ne():
 	t2 = False
 	#check if there is no nash equilibria
 	if (ne == []):
-		messagebox.showinfo("Nash equilibrium in mixed strategies", "There is no Nash Equilibria in mixed strategies or there is an infinite number")
+		messagebox.showinfo("Nash equilibrium in mixed strategies", "There is no Nash Equilibria in mixed strategies or there is an infinite number. Plot best response functions to get better information")
 		raise Exception("No nash equilibria")
 
 	#check if it is a pure nash equilibrium
@@ -621,7 +621,7 @@ def show_mixed_ne():
 		if (ne[1][i] == 1):
 			t2 = True
 		if (t1 and t2):
-			messagebox.showinfo("Nash Equilibrium in mixed strategies", "The nash equilibrium in mixed strategies that have been found results to be a pure strategies Nash equilibrium. Use 'Find Pure NE' to find it")
+			messagebox.showinfo("Nash Equilibrium in mixed strategies", "The nash equilibrium in mixed strategies that have been found results to be a pure strategies Nash equilibrium. Use 'Pure NE' function to find it")
 			raise Exception("ERROR - Not a mixed strategies NE")
 
 	#show messagebox with the mixed strategies equilibria
@@ -630,7 +630,7 @@ def show_mixed_ne():
 		msg2 = msg2 + str(ne[1][i]) + ","
 	msg1 = msg1[:-1] + ")\n\n"
 	msg2 = msg2[:-1] + ")"
-	messagebox.showinfo("Nash Equilibrium in mixed strategies", msg1 + msg2 + "\n\n\n\n" + nte)
+	messagebox.showinfo("Nash Equilibrium in mixed strategies", msg1 + msg2 + "\n\n\n\n" + nte + "\nAlso, use best response functions function to check if there is an infinite amount of mixed Nash Equilibria")
 
 
 
@@ -706,12 +706,12 @@ def show_iterated_strongly_dominated_strategies_message():
 		msg = msg + "Player B will always choose strategy b" + str(list(b_dicc.keys())[0] + 1) + "\n\n"
 
 	if ((len(a_matrix) == 1) and (len(b_matrix) == 1)):
-		msg = msg + "Solution payoff is (" + str(a_matrix[0][0]) + "," + str(b_matrix[0][0]) + ")"
+		msg = msg + "Iterated elimination of dominated strategies equilibrium is (" + str(a_matrix[0][0]) + "," + str(b_matrix[0][0]) + ")"
 	else:
-		msg = msg + "There is no solution on strongly iterated dominated strategies"
+		msg = msg + "The game isn't dominance solvable (there is no IEDS equilibrium)"
 
 
-	messagebox.showinfo("Strongly Iterated Dominated Strategies", msg)
+	messagebox.showinfo("Iterated Dominated Strategies", msg)
 
 
 
@@ -722,7 +722,7 @@ def compute_plot_equilibria():
 	mixed = compute_mixed_ne()
 
 	if ((len(list(a_dicc.keys())) > 2) or (len(list(b_dicc.keys())) > 2)):
-		messagebox.showerror("ERROR", "Can't plot functions: maximum of 2x2 matrices allowed (or matrices that result into a 2x2 matrix or less by elimination of dominated strategies)")
+		messagebox.showerror("ERROR", "Can't plot functions: maximum of 2x2 matrices allowed (or matrices that result into a 2x2 matrix by elimination of dominated strategies)")
 		raise Exception("Not a 2x2 matrix or less")
 
 	nashs = []
@@ -745,25 +745,6 @@ def compute_plot_equilibria():
 		else:
 			pstrats[i].append(0)
 
-
-	#check if it is a pure nash equilibrium 
-	#not necessary at the moment
-	"""
-	a_mixed = False
-	b_mixed = False
-	if (mixed != []):
-		
-		for i in range(len(mixed[0])):
-			if (mixed[0][i] == 1):
-				a_mixed = True
-			if (mixed[1][i] == 1):
-				b_mixed = True
-			if (a_mixed and b_mixed):
-				break
-
-	"""
-
-
 	#don't add empty list of mixed strategies nash equilibrium 
 	if mixed == []:
 		return pstrats
@@ -774,12 +755,14 @@ def compute_plot_equilibria():
 		return pstrats
 
 
+
+#Plot optimal responses of each player to a mixed strategy
 def compute_optimal_line():
 	show_iterated_strongly_dominated_strategies_color()
 	anydominated = False
 
 	if ((len(list(a_dicc.keys())) > 2) or (len(list(b_dicc.keys())) > 2)):
-		messagebox.showerror("ERROR", "Can't plot functions: maximum of 2x2 matrices allowed (or matrices that result into a 2x2 matrix or less by elimination of dominated strategies)")
+		messagebox.showerror("ERROR", "Can't plot functions: only matrix maximum dimension of 2 or 1 allowed (or matrices that result into a 2x2 matrix or lesser by elimination of dominated strategies)")
 		raise Exception("Not a 2x2 matrix or less")
 
 	fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(11,7))
@@ -877,6 +860,7 @@ def compute_optimal_line():
 
 
 
+#get equation to use for the system of equations
 def get_prop_equation(l_eq):
 	if (len(l_eq) == 1):
 		return [l_eq[0],0]
@@ -885,11 +869,12 @@ def get_prop_equation(l_eq):
 			return [l_eq[0] - l_eq[1], l_eq[1]]
 
 
-
+#Plot Nash Equilibria in mixed strategies
 def plot_best_response():
 	ne = compute_plot_equilibria()
 	ne_a = []
 	ne_b = []
+	anychange = False
 	for i in range(len(ne)):
 		ne_a.append(ne[i][0])
 		ne_b.append(ne[i][1])
@@ -900,12 +885,14 @@ def plot_best_response():
 	blue_patch = patches.Patch(color="blue", label="Player A")
 	red_patch = patches.Patch(color="red", label="Player B")
 	plt.legend(handles=[blue_patch,red_patch], loc="lower right")
+	fig.suptitle("Best Response Functions", fontsize="18")
 
 	#if we have a 2x2 matrix on the start and any row/column is being dominated, also plot them
 	if((rows == 4) and (columns == 3) and ((len(list(a_dicc.keys())) == 1) or (len(list(b_dicc.keys())) == 1))):
 		
 
 		if(len(list(a_dicc.keys())) == 1):
+			anychange = True
 			ax1.vlines(1-list(a_dicc.keys())[0],0,1, color="blue", linewidth=4, linestyle="-.")
 			if(len(list(b_dicc.keys())) == 1):
 				ax1.hlines(1-list(b_dicc.keys())[0],0,1, color="red", linewidth=4, linestyle="--")	
@@ -914,6 +901,7 @@ def plot_best_response():
 				ax1.vlines(1-list(a_dicc.keys())[0],0,1, color="red", linewidth=4, linestyle="--")
 		
 		if((len(list(b_dicc.keys())) == 1) and (len(list(a_dicc.keys())) == 2)):
+			anychange = True
 			ax1.hlines(1-list(b_dicc.keys())[0],0,1, color="red", linewidth=4, linestyle="--")
 			ax1.vlines(1-list(a_dicc.keys())[0],0,1, color="blue", linewidth=4, linestyle="-.")
 			ax1.hlines(1-list(b_dicc.keys())[0],0,1, color="blue", linewidth=4, linestyle="-.")
@@ -921,6 +909,7 @@ def plot_best_response():
 	
 	#2x2 matrices 
 	if(((len(list(a_dicc.keys())) == 2) and (len(list(b_dicc.keys())) == 2))):
+		anychange = True
 		#matrices with mixed strategies
 		if(ismixed):
 			ax1.hlines(ne_b[-1],0,1, color="blue", linewidth=4, linestyle="-.")
@@ -997,10 +986,468 @@ def plot_best_response():
 
 
 		if((not ismixed) and (p_notmixed == "No")):
+			anychange = True
 			ax1.add_patch(patches.Rectangle((0,0),1,1, color="purple"))
 
+	if(not anychange):
+		messagebox.showerror("ERROR", "Can't plot functions: only matrices with a maximum dimension of 2 or 1 allowed (or matrices that result into a 2x2 matrix by elimination of dominated strategies)")
+		raise Exception("Not a 2x2 matrix (with IEDS)")
 	plt.show()
 	
+
+
+#shows a messagebox with all pure security strategies
+def pure_security_strategies():
+	show_iterated_strongly_dominated_strategies_color()
+
+	
+	min_a = []
+	min_b = []
+	max_a = []
+	max_b = []
+	msg = ""
+
+	#finding the minimum of each row and column and then appending its maximums to a new list
+	for item in a_matrix:
+		min_a.append(min(item))
+
+	for item in b_matrix:
+		min_b.append(min(item))
+
+	for i in range(len(min_a)):
+		if(min_a[i] == max(min_a)):
+			max_a.append(sorted(list(a_dicc.keys()))[i])
+
+	for i in range(len(min_b)):
+		if(min_b[i] == max(min_b)):
+			max_b.append(sorted(list(b_dicc.keys()))[i])
+
+	#all rows and columns without IEDS for finding the correct number when printing payoffs
+	get_a_numbers()
+	get_b_numbers()
+
+	for a_item in max_a:
+		for b_item in max_b:
+
+			msg = msg + "(a"+ str(a_item+1)  + ",b" + str(b_item+1) +  ") with a secure payoff of (" + str(a_dicc[a_item][b_item])  + "," +  str(b_dicc[b_item][a_item]) + ")\n\n"
+
+	if(msg==""):
+		messagebox.showerror("Pure Security Strategies", "No pure security strategies found")
+	else:
+		messagebox.showinfo("Pure Security Strategies", msg)
+
+
+
+
+#Same as find_mixed_ne but with swaped rows and columns. Also, only 2x2 matrices are allowed (or 2x2 by applying IEDS).
+def find_mixed_security():
+	show_iterated_strongly_dominated_strategies_color()
+	global ismixed
+	ismixed = False
+	global eval_list
+	eval_list = []
+	global isatheproblem
+	isatheproblem = False
+	global p_notmixed
+	p_notmixed = "No"
+	sa_matrix = []
+	sb_matrix = []
+
+	#swap columns and rows of a_matrix and b_matrix for computing max number of each
+	for j in range(len(a_matrix[0])):
+		sa_matrix.append([])
+		for i in range(len(a_matrix)):
+			sa_matrix[-1].append(a_matrix[i][j])
+			
+	for j in range(len(b_matrix[0])):
+		sb_matrix.append([])
+		for i in range(len(b_matrix)):
+			sb_matrix[-1].append(b_matrix[i][j])
+
+
+	
+	if ((len(a_matrix) != 2) or (len(b_matrix) != 2)):
+		messagebox.showerror("ERROR", "Only 2x2 matrices allowed (or larger dimension matrices that become a 2x2 matrix by applying IEDS)")
+		raise Exception("ERROR - Not a 2x2 matrix")
+
+
+	dimension = len(a_matrix) 
+	a_eq_list = []
+	b_eq_list = []
+	for i in range(dimension - 1):
+		a_each_eq = []
+		b_each_eq = []
+		for j in range(dimension):	
+			a_each_eq.append(sa_matrix[i][j] - sa_matrix[i+1][j])
+			b_each_eq.append(sb_matrix[i][j] - sb_matrix[i+1][j])
+		a_eq_list.append(a_each_eq)
+		b_eq_list.append(b_each_eq)
+	prop_sum = [1] * dimension
+	a_eq_list.append(prop_sum)
+	b_eq_list.append(prop_sum)
+	a_array = np.array(a_eq_list)
+	b_array = np.array(b_eq_list)
+	zeroes = [0] * (dimension - 1)
+	zeroes.append(1)
+	
+	#catch error if there is no mixed security equilibrium
+	try:
+		isatheproblem = True
+		p = np.linalg.solve(a_array, zeroes)
+		isatheproblem = False
+		q = np.linalg.solve(b_array, zeroes)
+
+	except:
+		if(isatheproblem):
+			try:
+				p_notmixed = np.linalg.solve(b_array, zeroes)
+				p_notmixed = p_notmixed[0]
+				#check if there is any negative value
+				if((p_notmixed < 0) or (p_notmixed > 1)):
+					if(eval_list[2]):
+						if((sb_matrix[1][1]) > ((sb_matrix[1][0] - sb_matrix[1][1]) + sb_matrix[1][1])):
+							p_notmixed = 0
+						elif((sb_matrix[1][1]) < ((sb_matrix[1][0] - sb_matrix[1][1]) + sb_matrix[1][1])):
+							p_notmixed = 1
+
+					else:
+						if((sb_matrix[0][1]) > ((sb_matrix[0][0] - sb_matrix[0][1]) + sb_matrix[0][1])):
+							p_notmixed = 0
+						elif((sb_matrix[0][1]) < ((sb_matrix[0][0] - sb_matrix[0][1]) + sb_matrix[0][1])):
+							p_notmixed = 1
+
+			except:
+				pass
+		else:
+			p_notmixed = np.linalg.solve(a_array, zeroes)
+			p_notmixed = p_notmixed[0]
+		#check if there is any negative value
+			if((p_notmixed < 0) or (p_notmixed > 1)):
+				if(eval_list[0]):
+					if((sa_matrix[1][1]) > ((sa_matrix[1][0] - sa_matrix[1][1]) + sa_matrix[1][1])):
+						p_notmixed = 0
+					elif((sa_matrix[1][1]) < ((sa_matrix[1][0] - sa_matrix[1][1]) + sa_matrix[1][1])):
+						p_notmixed = 1
+
+				else:
+					if((sa_matrix[0][1]) > ((sa_matrix[0][0] - sa_matrix[0][1]) + sa_matrix[0][1])):
+						p_notmixed = 0
+					elif((sa_matrix[0][1]) < ((sa_matrix[0][0] - sa_matrix[0][1]) + sa_matrix[0][1])):
+						p_notmixed = 1
+
+		if(dimension == 2):
+			pa1 = sa_matrix[0][1]
+			pa2 = sa_matrix[1][1]
+			pa3 = (sa_matrix[0][0] - sa_matrix[0][1]) * 1 + sa_matrix[0][1]
+			pa4 = (sa_matrix[1][0] - sa_matrix[1][1]) * 1 + sa_matrix[1][1]
+			eval_list.append(pa1 >= pa2)
+			eval_list.append(pa3 >= pa4)
+			
+			pb1 = sb_matrix[0][1]
+			pb2 = sb_matrix[1][1]
+			pb3 = (sb_matrix[0][0] - sb_matrix[0][1]) * 1 + sb_matrix[0][1]
+			pb4 = (sb_matrix[1][0] - sb_matrix[1][1]) * 1 + sb_matrix[1][1]
+			eval_list.append(pb1 >= pb2)
+			eval_list.append(pb3 >= pb4)
+		return []
+	
+	else:
+		
+		p = list(p)
+		q = list(q)
+		for i in range(len(p)):
+			if (p[i] == int(p[i])):
+				p[i] = int(p[i])
+			if (q[i] == int(q[i])):
+				q[i] = int(q[i])
+			p[i] = round(p[i],2)
+			q[i] = round(q[i],2)
+		
+		
+		#evaluate equations for plotting best responses later (only 2x2 matrices)
+		if(dimension == 2):
+			pa1 = sa_matrix[0][1]
+			pa2 = sa_matrix[1][1]
+			pa3 = (sa_matrix[0][0] - sa_matrix[0][1]) * 1 + sa_matrix[0][1]
+			pa4 = (sa_matrix[1][0] - sa_matrix[1][1]) * 1 + sa_matrix[1][1]
+			eval_list.append(pa1 >= pa2)
+			eval_list.append(pa3 >= pa4)
+			
+			pb1 = sb_matrix[0][1]
+			pb2 = sb_matrix[1][1]
+			pb3 = (sb_matrix[0][0] - sb_matrix[0][1]) * 1 + sb_matrix[0][1]
+			pb4 = (sb_matrix[1][0] - sb_matrix[1][1]) * 1 + sb_matrix[1][1]
+			eval_list.append(pb1 >= pb2)
+			eval_list.append(pb3 >= pb4)
+
+
+		#check if there is any negative value
+		if((p[0] < 0) or (p[1] < 0)):
+			if(eval_list[0]):
+				if((sa_matrix[1][1]) > ((sa_matrix[1][0] - sa_matrix[1][1]) + sa_matrix[1][1])):
+					p = [0,1]
+				elif((sa_matrix[1][1]) < ((sa_matrix[1][0] - sa_matrix[1][1]) + sa_matrix[1][1])):
+					p = [1,0]
+				else:
+					return []
+
+			else:
+				if((sa_matrix[0][1]) > ((sa_matrix[0][0] - sa_matrix[0][1]) + sa_matrix[0][1])):
+					p = [0,1]
+				elif((sa_matrix[0][1]) < ((sa_matrix[0][0] - sa_matrix[0][1]) + sa_matrix[0][1])):
+					p = [1,0]
+				else:
+					return []
+
+		if((q[0] < 0) or (q[1] < 0)):
+			if(eval_list[2]):
+				if((sb_matrix[1][1]) > ((sb_matrix[1][0] - sb_matrix[1][1]) + sb_matrix[1][1])):
+					q = [0,1]
+				elif((sb_matrix[1][1]) < ((sb_matrix[1][0] - sb_matrix[1][1]) + sb_matrix[1][1])):
+					q = [1,0]
+				else:
+					return []
+
+			else:
+				if((sb_matrix[0][1]) > ((sb_matrix[0][0] - sb_matrix[0][1]) + sb_matrix[0][1])):
+					q = [0,1]
+				elif((sb_matrix[0][1]) < ((sb_matrix[0][0] - sb_matrix[0][1]) + sb_matrix[0][1])):
+					q = [1,0]
+				else:
+					return []
+
+		ismixed = True
+		return([p,q])
+
+
+def show_mixed_security():
+	ms = find_mixed_security()
+	msg1 = "Player A strategic profile: ("
+	msg2 = "Player B strategic profile: ("
+	nte = "Note: if there is any strategy that is dominated (in red), it has 0 probability of being played. It won't be shown in the solution but should be considered"
+	t1 = False
+	t2 = False
+	#check if there is no mixed security equilibria
+	if (ms == []):
+		messagebox.showinfo("Mixed Security Strategies", "There is no mixed security strategy or there is an infinite number. You will get better information by plotting")
+		raise Exception("No mixed security strategies")
+
+	#check if it is a pure security equilibrium
+	for i in range(len(ms[0])):
+		if (ms[0][i] == 1):
+			t1 = True
+		if (ms[1][i] == 1):
+			t2 = True
+		if (t1 and t2):
+			messagebox.showinfo("Mixed Security Strategies", "The mixed security strategy that have been found results to be a pure security strategy. Use 'Pure Security Strategies' to find it")
+			raise Exception("ERROR - Not a Mixed Security Strategies")
+
+	#show messagebox with the mixed strategies equilibria
+	for i in range(len(ms[0])):
+		msg1 = msg1 + str(ms[0][i]) + ","
+		msg2 = msg2 + str(ms[1][i]) + ","
+	msg1 = msg1[:-1] + ")\n\n"
+	msg2 = msg2[:-1] + ")"
+	messagebox.showinfo("Mixed Security Strategies", msg1 + msg2 + "\n\n\n\n" + nte + "\n\nAlso, use plot function to check if there is an infinite number of mixed security strategies")
+
+
+
+
+
+#Plot minimum functions for mixed security strategies
+def plot_mixed_security():
+	ms = find_mixed_security()
+	anydominated = False
+
+
+	fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(11,7))
+	fig.suptitle("Plot minimum functions for mixed security strategies", fontsize=20)
+	x = np.linspace(0,1,1000)
+
+	
+	ax1.set_title("Player A", fontsize=15)
+	ax2.set_title("Player B", fontsize=15)
+	ax1.set(xlabel="p", ylabel='$U_A$')
+	ax2.set(xlabel='q', ylabel='$U_B$')
+	ax1.grid(linestyle="--")
+	ax2.grid(linestyle="--")
+	fig.subplots_adjust(wspace=0.3, hspace=1.5)
+	sa_matrix = []
+	sb_matrix = []
+
+	blue_patch = patches.Patch(color="blue", label="W1(p)")
+	red_patch = patches.Patch(color="red", label="W2(q)")
+	ax1.legend(handles=[blue_patch], loc="lower right")
+	ax2.legend(handles=[red_patch], loc="lower right")
+	
+	#swap columns and rows of a_matrix and b_matrix for computing max number of each
+	for j in range(len(a_matrix[0])):
+		sa_matrix.append([])
+		for i in range(len(a_matrix)):
+			sa_matrix[-1].append(a_matrix[i][j])
+			
+	for j in range(len(b_matrix[0])):
+		sb_matrix.append([])
+		for i in range(len(b_matrix)):
+			sb_matrix[-1].append(b_matrix[i][j])
+
+
+
+	if(ms == []):
+		
+		if(p_notmixed=='No'):
+			item1 = get_prop_equation(sa_matrix[0])
+			ax1.plot(x, x*item1[0] + item1[1], linewidth=4, color="b")
+			item2 = get_prop_equation(sb_matrix[0])
+			ax2.plot(x, x*item2[0] + item2[1], linewidth=4, color="r")
+			
+			fig.show()
+			raise Exception("Finished, already solved")
+
+		if(isatheproblem):
+			item1 = get_prop_equation(sa_matrix[0])
+			ax1.plot(x, x*item1[0] + item1[1], linewidth=4, color="b")
+			if(p_notmixed == 1):
+				if(eval_list[2]):
+					item1 = get_prop_equation(sb_matrix[1])
+					ax2.plot(x,x*item1[0] + item1[1], linewidth=4, color="r")
+				else:
+					item1 = get_prop_equation(sb_matrix[0])
+					ax2.plot(x,x*item1[0] + item1[1], linewidth=4, color="r")
+			
+			elif(p_notmixed == 0):
+				if(eval_list[3]):
+					item1 = get_prop_equation(sb_matrix[1])
+					ax2.plot(x,x*item1[0] + item1[1], linewidth=4, color="r")
+				else:
+					item1 = get_prop_equation(sb_matrix[0])
+					ax2.plot(x,x*item1[0] + item1[1], linewidth=4, color="r")
+			else:
+				linx1 = np.linspace(0,p_notmixed,1000)
+				linx2 = np.linspace(p_notmixed,1,1000)
+				if(eval_list[2]):
+					item1 = get_prop_equation(sb_matrix[1])
+					ax2.plot(linx1,linx1*item1[0] + item1[1], linewidth=4, color="r")
+					item1 = get_prop_equation(sb_matrix[0])
+					ax2.plot(linx2,linx2*item1[0] + item1[1], linewidth=4, color="r")
+				else:
+					item1 = get_prop_equation(sb_matrix[0])
+					ax2.plot(linx1,linx1*item1[0] + item1[1], linewidth=4, color="r")
+					item1 = get_prop_equation(sb_matrix[1])
+					ax2.plot(linx2,linx2*item1[0] + item1[1], linewidth=4, color="r")
+
+			fig.show()
+			raise Exception("Finished, already solved")
+
+
+		if((not isatheproblem) and (not ismixed)):
+			item1 = get_prop_equation(sb_matrix[0])
+			ax2.plot(x, x*item1[0] + item1[1], linewidth=4, color="r")
+			if(p_notmixed == 1):
+				if(eval_list[0]):
+					item1 = get_prop_equation(sa_matrix[1])
+					ax1.plot(x,x*item1[0] + item1[1], linewidth=4, color="b")
+				else:
+					item1 = get_prop_equation(sa_matrix[0])
+					ax1.plot(x,x*item1[0] + item1[1], linewidth=4, color="b")
+			
+			elif(p_notmixed == 0):
+				if(eval_list[1]):
+					item1 = get_prop_equation(sa_matrix[1])
+					ax1.plot(x,x*item1[0] + item1[1], linewidth=4, color="b")
+				else:
+					item1 = get_prop_equation(sa_matrix[0])
+					ax1.plot(x,x*item1[0] + item1[1], linewidth=4, color="b")
+			else:
+				linx1 = np.linspace(0,p_notmixed,1000)
+				linx2 = np.linspace(p_notmixed,1,1000)
+				if(eval_list[0]):
+					item1 = get_prop_equation(sa_matrix[1])
+					ax1.plot(linx1,linx1*item1[0] + item1[1], linewidth=4, color="b")
+					item1 = get_prop_equation(sa_matrix[0])
+					ax1.plot(linx2,linx2*item1[0] + item1[1], linewidth=4, color="b")
+				else:
+					item1 = get_prop_equation(sa_matrix[0])
+					ax1.plot(linx1,linx1*item1[0] + item1[1], linewidth=4, color="b")
+					item1 = get_prop_equation(sa_matrix[1])
+					ax1.plot(linx2,linx2*item1[0] + item1[1], linewidth=4, color="b")
+
+			fig.show()
+			raise Exception("Finished, already solved")
+
+	#left graph (player A)
+	if(ms[0][0] == 1):
+		if(eval_list[0]):
+			item1 = get_prop_equation(sa_matrix[1])
+			ax1.plot(x,x*item1[0] + item1[1], linewidth=4, color="b")
+		else:
+			item1 = get_prop_equation(sa_matrix[0])
+			ax1.plot(x,x*item1[0] + item1[1], linewidth=4, color="b")
+
+
+	elif(ms[0][0] == 0):
+		if(eval_list[1]):
+			item1 = get_prop_equation(sa_matrix[1])
+			ax1.plot(x,x*item1[0] + item1[1], linewidth=4, color="b")
+		else:
+			item1 = get_prop_equation(sa_matrix[0])
+			ax1.plot(x,x*item1[0] + item1[1], linewidth=4, color="b")
+	
+	else:	
+
+		linx1 = np.linspace(0,ms[0][0],1000)
+		linx2 = np.linspace(ms[0][0],1,1000)
+		if(eval_list[0]):
+			item1 = get_prop_equation(sa_matrix[1])
+			ax1.plot(linx1,linx1*item1[0] + item1[1], linewidth=4, color="b")
+			item1 = get_prop_equation(sa_matrix[0])
+			ax1.plot(linx2,linx2*item1[0] + item1[1], linewidth=4, color="b")
+		else:
+			item1 = get_prop_equation(sa_matrix[0])
+			ax1.plot(linx1,linx1*item1[0] + item1[1], linewidth=4, color="b")
+			item1 = get_prop_equation(sa_matrix[1])
+			ax1.plot(linx2,linx2*item1[0] + item1[1], linewidth=4, color="b")
+
+
+
+	#right graph (player B)
+	if(ms[1][0] == 1):
+		if(eval_list[2]):
+			item1 = get_prop_equation(sb_matrix[1])
+			ax2.plot(x,x*item1[0] + item1[1], linewidth=4, color="r")
+		else:
+			item1 = get_prop_equation(sb_matrix[0])
+			ax2.plot(x,x*item1[0] + item1[1], linewidth=4, color="r")
+
+
+	elif(ms[1][0] == 0):
+		if(eval_list[3]):
+			item1 = get_prop_equation(sb_matrix[1])
+			ax2.plot(x,x*item1[0] + item1[1], linewidth=4, color="r")
+		else:
+			item1 = get_prop_equation(sb_matrix[0])
+			ax2.plot(x,x*item1[0] + item1[1], linewidth=4, color="r")
+	
+	else:	
+
+		linx1 = np.linspace(0,ms[1][0],1000)
+		linx2 = np.linspace(ms[1][0],1,1000)
+		if(eval_list[2]):
+			item1 = get_prop_equation(sb_matrix[1])
+			ax2.plot(linx1,linx1*item1[0] + item1[1], linewidth=4, color="r")
+			item1 = get_prop_equation(sb_matrix[0])
+			ax2.plot(linx2,linx2*item1[0] + item1[1], linewidth=4, color="r")
+		else:
+			item1 = get_prop_equation(sb_matrix[0])
+			ax2.plot(linx1,linx1*item1[0] + item1[1], linewidth=4, color="r")
+			item1 = get_prop_equation(sb_matrix[1])
+			ax2.plot(linx2,linx2*item1[0] + item1[1], linewidth=4, color="r")
+
+
+
+	fig.show()
+
+
 
 
 """
@@ -1023,35 +1470,47 @@ def create_button_window():
 	buttonframe5 = button_frame5.grid(padx=8, pady=8, row=1, column=2)
 	button_frame6 = Frame(window, highlightthickness=3, bd=3, bg="#C90A2B")
 	buttonframe6 = button_frame6.grid(padx=8, pady=8, row=1, column=1)
+	button_frame30 = Frame(window, highlightthickness=3, bd=3, bg="#C90A2B")
+	buttonframe30 = button_frame30.grid(padx=8, pady=8, row=1, column=3)
+	button_frame31 = Frame(window, highlightthickness=3, bd=3, bg="#C90A2B")
+	buttonframe31 = button_frame31.grid(padx=8, pady=8, row=2, column=3)
+	button_frame32 = Frame(window, highlightthickness=3, bd=3, bg="#C90A2B")
+	buttonframe32 = button_frame32.grid(padx=8, pady=8, row=3, column=3)
 
 	def quit_action_window():
 		window.destroy()
 		
 
-	btn12 = Button(button_frame1, text="Plot optimal responses of each player to a mixed strategy", command=lambda:[quit_action_window(),compute_optimal_line()], width=28, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
+	btn12 = Button(button_frame1, text="Plot optimal responses of each player to a mixed strategy", command=lambda:[quit_action_window(),compute_optimal_line()], width=20, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
 	btn12.grid()
 
-	btn11 = Button(button_frame2, text="Plot Nash Equilibria in mixed strategies", command=lambda:[quit_action_window(),plot_best_response()], width=28, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
+	btn11 = Button(button_frame2, text="Plot Nash Equilibria in mixed strategies (best response functions)", command=lambda:[quit_action_window(),plot_best_response()], width=20, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
 	btn11.grid()
 
-	btn10 = Button(button_frame3, text="Mixed Nash Equilibrium", command=lambda:[quit_action_window(),show_mixed_ne()], width=28, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
+	btn10 = Button(button_frame3, text="Mixed Nash Equilibrium", command=lambda:[quit_action_window(),show_mixed_ne()], width=20, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
 	btn10.grid()
 
-	btn8 = Button(button_frame4, text="Pure Nash Equilibria", command=lambda:[quit_action_window(),show_pure_ne()], width=28, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
+	btn8 = Button(button_frame4, text="Pure Nash Equilibria", command=lambda:[quit_action_window(),show_pure_ne()], width=20, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
 	btn8.grid()
 
-	btn9 = Button(button_frame5, text="Iterated Elimination of Dominated Strategies", command=lambda:[quit_action_window(),show_iterated_strongly_dominated_strategies_message()], width=28, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
+	btn9 = Button(button_frame5, text="Iterated Elimination of Dominated Strategies", command=lambda:[quit_action_window(),show_iterated_strongly_dominated_strategies_message()], width=20, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
 	btn9.grid()
 
-	btn5 = Button(button_frame6, text="Show Dominated Strategies", command=lambda:[quit_action_window(),show_dominated()], width=28, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
+	btn5 = Button(button_frame6, text="Dominated Strategies", command=lambda:[quit_action_window(),show_dominated()], width=20, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
 	btn5.grid()
 
-	
+	btn30 = Button(button_frame30, text="Pure Security Strategies", command=lambda:[quit_action_window(),pure_security_strategies()], width=20, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
+	btn30.grid()
 
+	btn31 = Button(button_frame31, text="Mixed Security Strategies", command=lambda:[quit_action_window(),show_mixed_security()], width=20, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
+	btn31.grid()		
+
+	btn32 = Button(button_frame32, text="Plot minimum functions for mixed security strategies", command=lambda:[quit_action_window(),plot_mixed_security()], width=20, height=5, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
+	btn32.grid()
 
 #About button
 def show_about():
-	msg = "Hi I'm Pol, the developer of this project. This software is being developed since January 2020. You are currently using the version 0.7 and there are still some functionalities to be implemented in the future. Check my Github profile for more information: www.github.com/Pol-Puig/Game-Theory-Toolkit\n\nFor any issue related on this program or any other matter, feel free to contact me: contact@polpuig.com\n\nThank you for using my software!!!\n\n" 
+	msg = "Hi I'm Pol, the developer of this project. This software began to be developed in January 2020. You are currently using version 0.8 (released March 2020) and there are still some functionalities to be implemented in the future. \n\nCheck out my Github profile for more information:\nwww.github.com/Pol-Puig/Game-Theory-Toolkit\n\nFor any issue related on this program or any other matter, feel free to contact me:\ncontact@polpuig.com\n\n\nThank you for using my software!!!\n\n" 
 	messagebox.showinfo("ABOUT", msg)
 
 about_btn = Button(root, text="Created by: Pol Puig", command=show_about, relief="ridge", font="Verdana 7 bold")
