@@ -16,7 +16,9 @@ The Python libraries that I have used are 'matplotlib' and 'numpy'. For the GUI,
 * Find mixed Nash Equilibrium. A message box indicates the mixed Nash Equilibrium (the one that you get by solving the system of equations). It also tells you if the Mixed Nash Equilibrium it is a pure nash equilibrium or it shows an error if there is no Mixed Nash Equilibrium. Be aware that could be infinite mixed Nash equilibria, plot best response functions for more information.
 * Plot optimal response of each player to a mixed strategy. Maximum of 2x2 matrices or matrices that after the IEDS have a dimension of 2. If there is any dominated strategy, it will only be plotted if the original matrix is 2x2 (not possible to plot all the dominated lines)
 * Plot best response functions. Plot best response functions depending on the optimal response of each player to a a mixed strategy
-
+* Pure security strategies. Shows a message box with the pure security strategies and their respective payoffs.
+* Mixed security strategies. Shows strategic profile for both players.
+* Plot minimum functions. Finds the minimum functions to have a better understanding of the mixed security strategies that players should follow.
 
 
 ## Future development
@@ -36,7 +38,8 @@ The Python libraries that I have used are 'matplotlib' and 'numpy'. For the GUI,
 * When plotting best response functions, the main window freezes and is not possible to do anything before closing the figure window.
 * Released file is very large. Working on directory optimization to reduce software heaviness.
 * Not correctly plotting best response functions when matrix dimension is bigger than 2 and applying IEDS leads to a matrix with a dimension lesser than 2. **SOLVED**
-* Some grammar mistakes (mainly in the 'About' message box)
+* Some grammar mistakes (mainly in the 'About' message box) **SOLVED**
+* Best response functions are not plotted correctly when there is a dominated strategy and matrix of dimension 2. **SOLVED**
 
 
 
@@ -45,7 +48,7 @@ The Python libraries that I have used are 'matplotlib' and 'numpy'. For the GUI,
 
 **Download:** **[Game Theory Toolkit v0.8](https://github.com/Pol-Puig/Game-Theory-Toolkit/releases/download/GTT_0_8/Game_Theory_Toolkit_0_8.zip)**
 
-Download and decompress the file. Then run the executable file called 'Game_Theory_toolkit.exe' that is inside the folder. An antivirus warning will likely prompt. Ignore it (there are no malicious files, don't worry) and just run the executable.
+Download and unzip the file. Then run the executable file called 'Game_Theory_toolkit.exe' that is inside the folder. An antivirus warning will likely prompt. Ignore it (there are no malicious files, don't worry) and just run the executable.
 
 <b>Note: MacOS is not yet supported although it may be possible to run it using Wine or using a virtual machine.
   
