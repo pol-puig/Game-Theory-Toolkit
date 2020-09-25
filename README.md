@@ -29,7 +29,8 @@ The Python libraries that I have used are 'matplotlib' and 'numpy'. For the GUI,
 * Add tool: Mixed security strategies. Plot and find probabilities.   **ADDED**
 * Improve overall 'badly' written code.
 * Improve User Interface by making it more friendly and better color combining. **DONE**
-* Add a database containing 'famous' games.
+* Add a database containing 'famous' games. **ADDED**
+* Add more 'famous' games in the database.
 
 
 
