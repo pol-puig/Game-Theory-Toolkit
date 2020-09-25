@@ -4,6 +4,11 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
+import json
+
+#Load json file containing games info
+with open('files/game_db.json') as json_file:
+	games = json.load(json_file)
 
 
 root = Tk()
@@ -891,22 +896,19 @@ def plot_best_response():
 	if((rows == 4) and (columns == 3) and ((len(list(a_dicc.keys())) == 1) or (len(list(b_dicc.keys())) == 1))):
 		
 
-		if(len(list(a_dicc.keys())) == 1):
+
+		if((len(list(a_dicc.keys())) == 1) and (len(list(b_dicc.keys())) == 2)):
 			anychange = True
+			ax1.add_patch(patches.Rectangle((0,0),1,1, color="red"))
 			ax1.vlines(1-list(a_dicc.keys())[0],0,1, color="blue", linewidth=4, linestyle="-.")
-			if(len(list(b_dicc.keys())) == 1):
-				ax1.hlines(1-list(b_dicc.keys())[0],0,1, color="red", linewidth=4, linestyle="--")	
-			else:
-				ax1.hlines(1-list(b_dicc.keys())[0],0,1, color="red", linewidth=4, linestyle="--")
-				ax1.vlines(1-list(a_dicc.keys())[0],0,1, color="red", linewidth=4, linestyle="--")
 		
 		if((len(list(b_dicc.keys())) == 1) and (len(list(a_dicc.keys())) == 2)):
 			anychange = True
+			ax1.add_patch(patches.Rectangle((0,0),1,1, color="blue"))
 			ax1.hlines(1-list(b_dicc.keys())[0],0,1, color="red", linewidth=4, linestyle="--")
-			ax1.vlines(1-list(a_dicc.keys())[0],0,1, color="blue", linewidth=4, linestyle="-.")
-			ax1.hlines(1-list(b_dicc.keys())[0],0,1, color="blue", linewidth=4, linestyle="-.")
-		
-	
+			
+
+
 	#2x2 matrices 
 	if(((len(list(a_dicc.keys())) == 2) and (len(list(b_dicc.keys())) == 2))):
 		anychange = True
@@ -990,7 +992,7 @@ def plot_best_response():
 			ax1.add_patch(patches.Rectangle((0,0),1,1, color="purple"))
 
 	if(not anychange):
-		messagebox.showerror("ERROR", "Can't plot functions: only matrices with a maximum dimension of 2 or 1 allowed (or matrices that result into a 2x2 matrix by elimination of dominated strategies)")
+		messagebox.showerror("ERROR", "Can't plot functions: only matrices with a dimension of 1 or 2 allowed (or matrices that result into a 2x2 matrix by elimination of dominated strategies)")
 		raise Exception("Not a 2x2 matrix (with IEDS)")
 	plt.show()
 	
@@ -1067,7 +1069,7 @@ def find_mixed_security():
 
 	
 	if ((len(a_matrix) != 2) or (len(b_matrix) != 2)):
-		messagebox.showerror("ERROR", "Only 2x2 matrices allowed (or larger dimension matrices that become a 2x2 matrix by applying IEDS)")
+		messagebox.showerror("ERROR", "Only matrices of dimension 2 are allowed (or larger dimension matrices that become a 2x2 matrix by applying IEDS)")
 		raise Exception("ERROR - Not a 2x2 matrix")
 
 
@@ -1451,8 +1453,96 @@ def plot_mixed_security():
 
 
 """
+
 BUTTONS AND LAYOUT
+
 """
+
+
+
+#Creates Window with all the information of the games
+def create_games_window():
+	window = Toplevel(root)
+	window.iconbitmap("files/logo_upf.ico")
+	window.title("Choose an option")
+	
+
+	description = Label(window, text=" ", wraplength=500, font='Verdana 10', justify="center", width=70)
+	description.grid(row=0, column=5, columnspan=50, rowspan=5)
+
+	#When hover over the button, show the detailed description
+	def on_enter(e):
+		description['text'] = games[buttons.index(e.widget)]['Description']
+		
+	def on_leave(e):
+   		description['text'] = ' '
+
+	def click(e):
+		write_game(buttons.index(e.widget))
+
+	def quit_games_window():
+   		window.destroy()
+
+   	#Make the matrix ready to insert the numbers and insert them 
+	def write_game(game_index):
+
+		clear_matrix()
+		clear_dominated_color()
+		clear_number_color()
+		row_size = games[game_index]["Size"]
+		col_size = games[game_index]["Size"]
+		
+		while ((rows - 2) > row_size):
+			delete_row()
+		while ((rows - 2) < row_size):
+			add_row()		
+		while ((columns - 1) > col_size):
+			delete_column()
+		while ((columns - 1) < col_size):
+			add_column()
+		
+
+		value_list = games[game_index]["Value"].split(",")
+		j = 0
+		for row in matrix:
+			for column in row:
+				column[1].insert(0, int(value_list[j]))
+				j += 1
+				column[3].insert(0, int(value_list[j]))
+				j += 1
+
+
+
+	#Create a button for each game using the JSON file
+	buttons = []
+	for i in range(len(games)):
+		button_frame1 = Frame(window, highlightthickness=3, bd=3, bg="#C90A2B")
+		buttonframe1 = button_frame1.grid(padx=5, pady=5, row=i, column=1)
+		btn = Button(button_frame1, text=games[i]['Name'], command=lambda:[quit_games_window()], width=15, height=4, justify="center", wraplength=150, font="Verdana 10 bold", relief="flat", activebackground="#D36779")
+		btn.grid()		
+		buttons.append(btn)
+		btn.bind("<Enter>", on_enter)
+		btn.bind("<Leave>", on_leave)
+		btn.bind("<Button-1>", click)
+
+
+
+
+#Place games button on the grid
+button_frame15 = Frame(root, highlightthickness=2, bd=2, bg="#C90A2B")
+buttonframe15 = button_frame15.grid(padx=5, pady=5, row=1000, column=10, columnspan=4, rowspan=3)
+games_button = Button(button_frame15, text="Games", command=create_games_window, relief="flat", font="Arial 8 bold")
+games_button.grid()
+
+
+
+
+
+
+
+
+
+#Tools window
 def create_button_window():
 	window = Toplevel(root)
 	window.iconbitmap("files/logo_upf.ico")
@@ -1510,7 +1600,7 @@ def create_button_window():
 
 #About button
 def show_about():
-	msg = "Hi I'm Pol, the developer of this project. This software began to be developed in January 2020. You are currently using version 0.8 (released March 2020) and there are still some functionalities to be implemented in the future. \n\nCheck out my Github profile for more information:\nwww.github.com/Pol-Puig/Game-Theory-Toolkit\n\nFor any issue related on this program or any other matter, feel free to contact me:\ncontact@polpuig.com\n\n\nThank you for using my software!!!\n\n" 
+	msg = "Hi I'm Pol, the developer of this project. This software began to be developed in January 2020. You are currently using version 0.8 (released March 2020) and there are still some functionalities to be implemented in the future. \n\nCheck out my Github profile for more information:\nwww.github.com/Pol-Puig/Game-Theory-Toolkit\n\nFor any issue related to this program or any other matter, feel free to contact me:\ncontact@polpuig.com\n\n\nThank you for using my software!!!\n\n" 
 	messagebox.showinfo("ABOUT", msg)
 
 about_btn = Button(root, text="Created by: Pol Puig", command=show_about, relief="ridge", font="Verdana 7 bold")
@@ -1519,7 +1609,7 @@ about_btn.grid(row=0,column=1000, sticky=NE)
 
 
 button_frame7 = Frame(root, highlightthickness=3, bd=3, bg="#C90A2B")
-buttonframe7 = button_frame7.grid(padx=8, pady=8, row=1000, column=7, columnspan=4, rowspan=3)
+buttonframe7 = button_frame7.grid(padx=8, pady=8, row=1000, column=6, columnspan=5, rowspan=3)
 button_frame8 = Frame(root, highlightthickness=3, bd=1, bg="#C90A2B")
 buttonframe8 = button_frame8.grid(padx=8, pady=8, row=1000, column=2, columnspan=5)
 button_frame9 = Frame(root, highlightthickness=3, bd=1, bg="#C90A2B")
