@@ -1,6 +1,6 @@
 # Game Theory Toolkit
 
-This project is about making a toolkit to help people interested in Game Theory solve some of the most common topics. The main idea was just to create an interective matrix that could find pure Nash Equilibria and not much more. But the interest I have in this project has made me try to develope more tools and make the project more complete. Now it is even possible to plot some of the functions covered in Game Theory.
+This project is about making a toolkit to help people interested in Game Theory solve some of the most common topics. The main idea was just to create an interactive matrix that could find pure Nash Equilibria and not much more. But the interest I have in this project has made me try to develop more tools and make the project more complete. Now it is even possible to plot some of the functions covered in Game Theory.
 
 The project is written in Python. I've chosen this language because, in my point of view, it is fairly easy to learn and has extraordinary libraries. It is also my favorite language that I've worked with so far.
 
@@ -13,9 +13,9 @@ The Python libraries that I have used are 'matplotlib' and 'numpy'. For the GUI,
 * Iterated elimination of dominated strategies. Highlights in red the columns and rows that have been eliminated. If there is a solution by applying this method, it shows it.
 * Show dominated strategies. Highlights in red the dominated strategies and in orange the weakly dominated strategies. Shows in a message box the strategies that are being dominated and by which strategies are being dominated.
 * Find pure Nash Equilibria. Looks for Nash Equilibria and shows their strategies in a message box. It also changes the color of the optimal response of each strategy to yellow in the matrix.
-* Find mixed Nash Equilibrium. A message box indicates the mixed Nash Equilibrium (the one that you get by solving the system of equations). It also tells you if the Mixed Nash Equilibrium it is a pure nash equilibrium or it shows an error if there is no Mixed Nash Equilibrium. Be aware that could be infinite mixed Nash equilibria, plot best response functions for more information.
+* Find mixed Nash Equilibrium. A message box indicates the mixed Nash Equilibrium (the one that you get by solving the system of equations). It also tells you if the Mixed Nash Equilibrium it is a pure Nash equilibrium or it shows an error if there is no Mixed Nash Equilibrium. Be aware that could be infinite mixed Nash equilibria, plot best response functions for more information.
 * Plot optimal response of each player to a mixed strategy. Maximum of 2x2 matrices or matrices that after the IEDS have a dimension of 2. If there is any dominated strategy, it will only be plotted if the original matrix is 2x2 (not possible to plot all the dominated lines)
-* Plot best response functions. Plot best response functions depending on the optimal response of each player to a a mixed strategy
+* Plot best response functions. Plot best response functions depending on the optimal response of each player to a mixed strategy
 * Pure security strategies. Shows a message box with the pure security strategies and their respective payoffs.
 * Mixed security strategies. Shows strategic profile for both players.
 * Plot minimum functions. Finds the minimum functions to have a better understanding of the mixed security strategies that players should follow.
