@@ -20,6 +20,12 @@ The Python libraries that I have used are 'matplotlib' and 'numpy'. For the GUI,
 * Mixed security strategies. Shows strategic profile for both players.
 * Plot minimum functions. Finds the minimum functions to have a better understanding of the mixed security strategies that players should follow.
 
+## Screenshots
+
+![image](https://github.com/pol-puig/Game-Theory-Toolkit/assets/62222818/e544a1d8-fb12-4592-8d12-7dfa69c1195f)
+![image](https://github.com/pol-puig/Game-Theory-Toolkit/assets/62222818/f1e6f7b1-ea19-47df-8d2b-25d5ab03d76e)
+![image](https://github.com/pol-puig/Game-Theory-Toolkit/assets/62222818/d9b4bcbc-9cc7-432b-a4af-611bdb047044)
+
 
 ## Future development
 
